@@ -298,7 +298,60 @@ class ModelProvider with ChangeNotifier {
         .toList();
   }
 
-  // reports methods:
+final Uri apiEndpoint = Uri.parse('http://185.132.55.54:8000/shoppingcardorder/');
+ List<DataProductModel> selectedProductId = [];
+ List<DataProductModel> selectedProductQuantity = [];
+     // List<int> productId = [];
+     //  List<int> quantity = [1,3];
+     //List<int> selectedProductId = [4,6];
+     //List<int> quantity = [1,3];
+     // List<int> selectedProductId = [4,6];
+void addId(DataProductModel productId) {
+  selectedProductId.add(productId);
+  notifyListeners();
+}
+void moveToProductId() {
+  for (var product in selectedProductId) {
+    addId(product);
+  }
+  notifyListeners();
+}
+void addQuantity(DataProductModel productQuantity) {
+  selectedProductQuantity.add(productQuantity);
+  notifyListeners();
+}
+
+void moveToProductQuantity() {
+  for (var product in selectedProductQuantity) {
+    addQuantity(product);
+  }
+  notifyListeners();
+}
+
+Future<void> sendPostRequestOrderList({required int userId}) async {
+  var headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+  var data = {
+    "user_id": userId,
+    "product_ids": selectedProductId,
+    "quantities": selectedProductQuantity,
+  };
+  var body = json.encode(data);
+  try {
+    var response = await http.post(apiEndpoint, headers: headers, body: body);
+    if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
+      print(responseBody);
+      print('Response status: ${response.statusCode}');
+    } else {
+      print('Error: ${response.reasonPhrase}');
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+}
 
 }
 

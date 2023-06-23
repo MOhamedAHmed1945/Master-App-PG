@@ -89,15 +89,20 @@ class InvoiceScreen extends StatelessWidget {
                         SizedBox(
                           height: 5.0,
                         ),
-                        ReusableTextButton(
+                         ReusableTextButton(
                           color: defBlue,
-                          onPressed: () {
+                          onPressed: () async {
+                            classInstance.moveToProductId();
+                            classInstance.moveToProductQuantity();
+                             //classInstance.selectedProductId;
+                              //classInstance.quantity;
+                            final userData = classInstance.getUserData();
+                            await classInstance.sendPostRequestOrderList(
+                                userId: userData!['user_id']);
                             classInstance.moveToOrderScreen();
-                            classInstance.removeItemOfList();
+                            //classInstance.removeItemOfList();
                             Navigator.pushNamed(
-                              context,
-                              OrdersScreen.ordersScreenRoute,
-                            );
+                                context, OrdersScreen.ordersScreenRoute);
                           },
                           text: 'OrderNow',
                         ),
